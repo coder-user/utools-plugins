@@ -1,15 +1,15 @@
 <template>
-    <div class="ctool-notice" ref="container">
-        <TransitionGroup name="ctool-notice-list" tag="div" v-if="items.length > 0">
-            <div class="ctool-notice-list-item" v-for="(item) in items" :key="item.key" :style="center ? {justifyContent:`center`} : {}">
-                <Icon :name="item.type === 'ad' ? 'ad' : 'message'" :size="14"/>
-                <template v-if="item.url.type === ''">
-                    {{ item.text }}
-                </template>
-                <Link v-else @click="open(item)">{{ item.text }}</Link>
-            </div>
-        </TransitionGroup>
-    </div>
+<!--    <div class="ctool-notice" ref="container">-->
+<!--        <TransitionGroup name="ctool-notice-list" tag="div" v-if="items.length > 0">-->
+<!--            <div class="ctool-notice-list-item" v-for="(item) in items" :key="item.key" :style="center ? {justifyContent:`center`} : {}">-->
+<!--                <Icon :name="item.type === 'ad' ? 'ad' : 'message'" :size="14"/>-->
+<!--                <template v-if="item.url.type === ''">-->
+<!--                    {{ item.text }}-->
+<!--                </template>-->
+<!--                <Link v-else @click="open(item)">{{ item.text }}</Link>-->
+<!--            </div>-->
+<!--        </TransitionGroup>-->
+<!--    </div>-->
 </template>
 <script setup lang="ts">
 import {openUrl} from "@/helper/helper";

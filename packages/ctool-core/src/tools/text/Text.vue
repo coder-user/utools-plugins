@@ -80,6 +80,15 @@
             ]"
                 @select="handle"
             />
+            <Dropdown
+                :size="size"
+                :placeholder="$t('text_prompt')"
+                :options="[
+                {value:'promptPolishText',label:$t('text_prompt_polish_text')},
+                {value:'promptExplainCode',label:$t('text_prompt_explain_code')},
+            ]"
+                @select="handle"
+            />
         </Align>
     </Card>
     <Modal v-model="replaceShow" :width="600" :title="$t('text_replace')" footer-type="long" @ok="replace">
@@ -204,7 +213,7 @@ const handle = (method, option: Record<string, any> = {}) => {
         return;
     }
     action.current.input = (new TextHandle(action.current.input))[method as keyof TextHandle](option) as string;
-    action.success()
+    action.success({copy_text: action.current.input})
 }
 
 const stat = $computed(() => {

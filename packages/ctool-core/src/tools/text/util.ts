@@ -7,6 +7,21 @@ const regExpQuote = function (str: string) {
     return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 };
 
+const processSensitiveWords = function(text: string): string {
+    const sensitiveWordsMap: { [key: string]: string } = {
+        'Yealink': 'Xiaobaidu',
+        'yealink': 'xiaobaidu',
+        '亿联': '小百度',
+    };
+
+    Object.entries(sensitiveWordsMap).forEach(([sensitiveWord, replacement]) => {
+        const regex = new RegExp(sensitiveWord, 'g');
+        text = text.replace(regex, replacement);
+    });
+
+    return text
+}
+
 // GBK字符集实际长度计算
 const getGbkStrLength = (str: string) => {
     let realLength = 0;
@@ -199,6 +214,16 @@ export default class {
     // 过滤所有换行符
     filterAllBr() {
         return this.text.replace(/\r?\n|\r/g, "")
+    }
+
+    promptPolishText(): string {
+        let prompt = "请使用简洁、清晰的语言帮助我优化以下文本，使其更加明了易懂：\n\n"
+        return prompt + processSensitiveWords(this.text)
+    }
+
+    promptExplainCode(): string {
+        let prompt = "请提供的以下代码的详细中文注释版本，帮助我更容易的理解代码：\n\n"
+        return prompt + processSensitiveWords(this.text)
     }
 
     // 标点替换
