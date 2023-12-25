@@ -1,5 +1,6 @@
-import {PlatformRuntime, StorageInterface, Storage, toolExists, getTool, FeatureInterface, tools} from "ctool-config";
-import storageUtools from "./storage"
+import {PlatformRuntime, StorageInterface, DisplayInterface, Storage, toolExists, getTool, FeatureInterface, tools} from "ctool-config";
+import storageUtools from "./storage";
+import displayUtools from "./display";
 
 type FeatureItem = { feature: FeatureInterface, cmds: string[] }
 
@@ -29,6 +30,10 @@ export const runtime = new (class implements PlatformRuntime {
 
     storage(): StorageInterface {
         return storageUtools;
+    }
+
+    display(): DisplayInterface {
+        return displayUtools;
     }
 
     getLocale() {

@@ -45,6 +45,10 @@ export default class {
         return this.platformRuntime.storage?.() || web.storage();
     }
 
+    get display() {
+        return this.platformRuntime.display?.() || web.display();
+    }
+
     call<T = any>(method: string, ...param: any[]): T {
         return this.platformRuntime[method]?.(...param);
     }

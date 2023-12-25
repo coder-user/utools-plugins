@@ -84,6 +84,10 @@ export interface StorageInterface {
     getAllKey(): string[]
 }
 
+export interface DisplayInterface {
+    hideMainWindow(): void
+}
+
 export type Storage = {
     get<T = any>(key: string, def: T | null, isVersion: boolean | null): T | null
     set<T = any>(key: string, value: T, expiry: number, isVersion: boolean): void
@@ -96,9 +100,11 @@ export interface PlatformRuntime {
 
     name: string
 
-    openUrl(url: string): any,
+    openUrl(url: string): any
 
     storage?: () => StorageInterface
+
+    display?: () => DisplayInterface
 
     getLocale?: () => string
 

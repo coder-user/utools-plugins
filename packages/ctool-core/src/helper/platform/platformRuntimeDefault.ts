@@ -1,5 +1,6 @@
 import {PlatformRuntime} from "ctool-config";
 import storage from "./storage";
+import display from "./display";
 
 export const runtime = new (class implements PlatformRuntime {
     name = "web"
@@ -24,4 +25,7 @@ export const runtime = new (class implements PlatformRuntime {
         return storage
     }
 
+    display() {
+        return display
+    }
 })

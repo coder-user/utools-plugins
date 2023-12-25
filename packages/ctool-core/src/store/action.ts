@@ -2,6 +2,7 @@
 import {reactive, toRaw} from 'vue'
 import dayjs from 'dayjs'
 import {instanceOfInput, instanceOfHistorySerializable} from "@/helper/util"
+import {display} from "@/helper/display"
 import {paste, copy as copyText, copyImage} from "@/helper/clipboard"
 import useOperate from "@/store/operate"
 import getHistoryInstance from "@/helper/history"
@@ -19,6 +20,7 @@ type Success = {
     copy_text?: string,
     copy_image?: string,
     is_save?: boolean
+    is_hide?: boolean
 }
 
 type InitializeReturn<T extends Record<string, any> = {}> = {
@@ -233,6 +235,10 @@ export const useAction = <T extends Record<string, any>>(input: InitializeReturn
         historyPush()
     }
 
+    const displayHide = () => {
+        display.hideMainWindow()
+    }
+
     // 处理成功
     const success = (
         {
@@ -240,16 +246,19 @@ export const useAction = <T extends Record<string, any>>(input: InitializeReturn
             message_type = "success",
             copy_text = "",
             copy_image = "",
-            is_save = true
+            is_save = true,
+            is_hide = false
         }: Success = {}
     ): void => {
         // 自动保存
         is_save && save()
         // 复制文本
         if (copy_text !== "" && storeSetting.items.auto_save_copy) {
-            return copyText(copy_text, () => {
+            copyText(copy_text, () => {
                 Message.success($t('main_ui_copy_text_ok'))
+                is_hide && displayHide()
             })
+            return
         }
         // 复制图片
         if (copy_image !== "" && storeSetting.items.auto_save_copy) {
@@ -261,6 +270,7 @@ export const useAction = <T extends Record<string, any>>(input: InitializeReturn
         if (message !== "") {
             Message[message_type](message, {offset: 150})
         }
+
     }
 
     return {

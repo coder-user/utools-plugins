@@ -213,7 +213,7 @@ const handle = (method, option: Record<string, any> = {}) => {
         return;
     }
     action.current.input = (new TextHandle(action.current.input))[method as keyof TextHandle](option) as string;
-    action.success({copy_text: action.current.input})
+    action.success({copy_text: action.current.input, is_hide: true})
 }
 
 const stat = $computed(() => {

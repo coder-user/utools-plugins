@@ -2,6 +2,7 @@ export type {
     StorageDataStructureInterface,
     StorageDataStructure,
     StorageInterface,
+    DisplayInterface,
     PlatformRuntime,
     LocaleLists,
     Locale,
