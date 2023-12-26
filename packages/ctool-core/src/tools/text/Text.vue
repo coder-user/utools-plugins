@@ -80,6 +80,9 @@
             ]"
                 @select="handle"
             />
+            <Button :size="size" :text="$t('text_transfer')" @click="handle('transfer')"/>
+            <Button :size="size" :text="$t('text_thino')" @click="handle('submit')"/>
+            <Button :size="size" :text="$t('text_wechat')" @click="handle('wechat')"/>
             <Dropdown
                 :size="size"
                 :placeholder="$t('text_prompt')"
@@ -213,7 +216,7 @@ const handle = (method, option: Record<string, any> = {}) => {
         return;
     }
     action.current.input = (new TextHandle(action.current.input))[method as keyof TextHandle](option) as string;
-    action.success({copy_text: action.current.input, is_hide: true})
+    action.success({copy_text: action.current.input, is_hide: false})
 }
 
 const stat = $computed(() => {

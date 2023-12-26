@@ -2,6 +2,73 @@ import {simpleToTradition, traditionToSimple} from "chinese-simple2traditional";
 import {orderBy, uniq} from 'lodash'
 import {Buffer} from 'buffer'
 import {TypeLists as RenameType, convent as nameConvent} from "@/helper/nameConvert";
+import axios from "axios";
+
+interface ThinoData {
+    isList: boolean;
+    type: ThinoType;
+    text: string;
+}
+
+enum ThinoType {
+    FILE = 'FILE',
+    DAILY = 'DAILY',
+    MULTI = 'MULTI',
+    CANVAS = 'CANVAS'
+}
+
+const createThino = function (
+    data: ThinoData,
+    port: number = 43999,
+    callback: () => void = () => {
+    },
+    fallback: () => void = () => {
+    }
+) {
+    if (data.type === ThinoType.FILE) {
+        data = appendInboxTagIfAbsent(data);
+    }
+    axios.post(`http://localhost:${port}/create`, data, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(callback).catch(fallback);
+};
+
+function appendInboxTagIfAbsent(data: ThinoData): ThinoData {
+    if (!data.text.includes('#')) {
+        data.text += '\n\n #inbox';
+    }
+    return data;
+}
+
+const token = '60810d9d4fed48809a6d4d8d9aec8cda';
+
+interface PushPlusData {
+    title: string;
+    content: string;
+    template?: string; // 可选字段
+}
+
+const createPushPlus = function (
+    data: PushPlusData,
+    callback: () => void = () => {},
+    fallback: () => void = () => {}
+) {
+    const url = 'https://www.pushplus.plus/send';
+    const postData = {
+        token: token,
+        title: data.title,
+        content: data.content,
+        template: data.template || 'markdown' // 如果未提供 template，则默认为 'markdown'
+    };
+
+    axios.post(url, postData)
+        .then(callback)
+        .catch(fallback);
+}
+
+
 
 const regExpQuote = function (str: string) {
     return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
@@ -226,6 +293,39 @@ export default class {
         return prompt + processSensitiveWords(this.text)
     }
 
+    transfer(): string {
+        return `curl --upload-file ./${this.text} https://transfer.sh/${this.text}`;
+    }
+
+    submit(): string  {
+        if (this.text.length === 0)
+          return "";
+      
+        createThino({
+          isList: false,
+          type: ThinoType.FILE,
+          text: this.text
+        }, 43999, () => {
+        }, () => {
+        })
+
+        return ""
+    }
+
+    wechat(): string {
+        if (this.text.length === 0)
+          return "";
+        
+        createPushPlus({
+            title: "memos",
+            content: this.text
+        }, () => {
+        }, () => {
+        })
+
+        return ""
+    }
+    
     // 标点替换
     replacePunctuation({type = "zh"}: Record<string, any> = {}) {
         const zh = ["“", "”", "‘", "’", "。", "，", "；", "：", "？", "！", "……", "—", "～", "（", "）", "《", "》"]
