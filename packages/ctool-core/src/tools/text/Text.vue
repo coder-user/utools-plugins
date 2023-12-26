@@ -26,7 +26,7 @@
             ]"
                 @select="handle"
             />
-            <Dropdown
+            <!-- <Dropdown
                 :size="size"
                 :placeholder="$t('text_punctuation')"
                 :options="[
@@ -34,7 +34,7 @@
                 {value:'zh',label:`${$t('text_en') } -> ${ $t('text_cn')}`},
             ]"
                 @select="type=>handle('replacePunctuation',{type})"
-            />
+            /> -->
             <Dropdown
                 :size="size"
                 :placeholder="$t('text_simplified_traditional')"
@@ -46,10 +46,10 @@
             />
             <Button :size="size" :text="$t('text_replace')" @click="replaceShow = true"/>
             <Button :size="size" :text="$t('text_escape')" @click="escapeShow = true"/>
-            <Button :size="size" :text="$t('text_line_remove_duplicate')" @click="handle('lineRemoveRepeat')"/>
-            <Dropdown :size="size" @select="(value)=>handle('rename',{type:value})" :placeholder="$t('text_rename')"
-                      :options="renameTypeLists.filter(item=>!['spaceCase','pascalCaseSpace'].includes(item.value))"/>
-            <Dropdown
+            <!-- <Button :size="size" :text="$t('text_line_remove_duplicate')" @click="handle('lineRemoveRepeat')"/> -->
+            <!-- <Dropdown :size="size" @select="(value)=>handle('rename',{type:value})" :placeholder="$t('text_rename')"
+                      :options="renameTypeLists.filter(item=>!['spaceCase','pascalCaseSpace'].includes(item.value))"/> -->
+            <!-- <Dropdown
                 :size="size"
                 :placeholder="$t('text_line_number')"
                 :options="[
@@ -57,7 +57,7 @@
                 {value:'removeLineIndex',label:$t('text_line_number_remove')},
             ]"
                 @select="handle"
-            />
+            /> -->
             <Dropdown
                 :size="size"
                 :placeholder="$t('text_sort')"
@@ -80,9 +80,6 @@
             ]"
                 @select="handle"
             />
-            <Button :size="size" :text="$t('text_transfer')" @click="handle('transfer')"/>
-            <Button :size="size" :text="$t('text_thino')" @click="handle('submit')"/>
-            <Button :size="size" :text="$t('text_wechat')" @click="handle('wechat')"/>
             <Dropdown
                 :size="size"
                 :placeholder="$t('text_prompt')"
@@ -92,6 +89,9 @@
             ]"
                 @select="handle"
             />
+            <Button :size="size" :text="$t('text_wechat')" @click="handle('wechat')"/>
+            <Button :size="size" :text="$t('text_sensitive_words')" @click="handle('processSensitiveWordsButton')"/>
+            <Button :size="size" :text="$t('text_thino')" @click="handle('submit')"/>
         </Align>
     </Card>
     <Modal v-model="replaceShow" :width="600" :title="$t('text_replace')" footer-type="long" @ok="replace">

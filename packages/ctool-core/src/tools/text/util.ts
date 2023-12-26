@@ -89,6 +89,35 @@ const processSensitiveWords = function(text: string): string {
     return text
 }
 
+const processSensitiveWordsWithConditionalReplacement = function(text: string): string {
+    if (text.includes('Yealink') || text.includes('yealink') || text.includes('亿联')) {
+        const sensitiveWordsMap: { [key: string]: string } = {
+            'Yealink': 'Xiaobaidu',
+            'yealink': 'xiaobaidu',
+            '亿联': '小百度',
+        };
+
+        Object.entries(sensitiveWordsMap).forEach(([sensitiveWord, replacement]) => {
+            const regex = new RegExp(sensitiveWord, 'g');
+            text = text.replace(regex, replacement);
+        });
+    } else {
+        const sensitiveWordsMap: { [key: string]: string } = {
+            'Xiaobaidu': 'Yealink',
+            'xiaobaidu': 'yealink',
+            '小百度': '亿联',
+        };
+
+        Object.entries(sensitiveWordsMap).forEach(([sensitiveWord, replacement]) => {
+            const regex = new RegExp(sensitiveWord, 'g');
+            text = text.replace(regex, replacement);
+        });
+    }
+
+    return text;
+}
+
+
 // GBK字符集实际长度计算
 const getGbkStrLength = (str: string) => {
     let realLength = 0;
@@ -291,6 +320,10 @@ export default class {
     promptExplainCode(): string {
         let prompt = "请提供的以下代码的详细中文注释版本，帮助我更容易的理解代码：\n\n"
         return prompt + processSensitiveWords(this.text)
+    }
+
+    processSensitiveWordsButton(): string {
+        return processSensitiveWordsWithConditionalReplacement(this.text)
     }
 
     transfer(): string {

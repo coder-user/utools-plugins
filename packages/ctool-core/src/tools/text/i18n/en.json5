@@ -30,6 +30,7 @@
     "transfer": "transfer",
     "thino": "thino",
     "wechat": "wechat",
+    "sensitive_words": "Sensitive Words",
     "filter_trim": "(trim) Removes whitespace from both ends of a string",
     "filter_blank_line": "Filter blank line",
     "filter_all_br": "Filter newlines",
