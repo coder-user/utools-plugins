@@ -52,6 +52,7 @@
             >
                 <Align>
                     <Button @click="general.beautify()">{{ $t(`json_format`) }}</Button>
+                    <Button @click="general.logBeautify()">{{ $t(`json_log_format`) }}</Button>
                     <Select :model-value="action.current.option.tab" @change="(value)=>general.tabs(value)" :placeholder="$t('json_format')" :options="tabOptions"/>
                     <Button @click="general.compress()">{{ $t(`json_compress`) }}</Button>
                     <span>|</span>
@@ -208,6 +209,37 @@ const general = {
         }
         action.success({copy_text: action.current.input})
     },
+
+    async logBeautify(code?: string, copy = true) {
+        let rawInput = this.getInput(code); 
+        try {
+            let lines = rawInput.split('\n'); 
+            let beautifiedLines: string[] = [];
+
+            for (let line of lines) {
+                if (line.trim()) { 
+                    let parsedLine = Json.parse(line); 
+                    if (parsedLine['http.request.body.content']) {
+                        parsedLine['http.request.body.content'] = Json.parse(parsedLine['http.request.body.content']);
+                    }
+                    if (parsedLine['http.response.body.content']) {
+                        parsedLine['http.response.body.content'] = Json.parse(parsedLine['http.response.body.content']);
+                    }
+                    let beautifiedLine = await util.beautify(Json.stringify(parsedLine, null, action.current.option.tab));
+                    beautifiedLines.push(beautifiedLine);
+                }
+            }
+            action.current.input = beautifiedLines.join('\n');
+
+            if (!copy) {
+                return action.save();
+            }
+            action.success({copy_text: action.current.input});
+        } catch (error) {
+            console.error("Error beautifying log: ", error);
+        }
+    },
+
     // 美化
     async compress() {
         action.current.input = await util.compress(this.getInput())

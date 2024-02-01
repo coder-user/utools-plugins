@@ -4,6 +4,7 @@
     "common": "常用",
     "key_rename": "键命名",
     "format": "格式化",
+    "log_format": "日志格式化",
     "compress": "压缩",
     "escape": "转义",
     "clear_escape": "移除转义",
